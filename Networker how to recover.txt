@@ -1,0 +1,64 @@
+From samatrix07
+
+./mminfo -s sabkupsvr02 -N /proj -q "savetime<=09/20/2011,level=incr" -r "savetime,volume,name,ssid,level,pool"
+  date   volume         name                           ssid         lvl pool
+09/13/2011 00129L4       /proj                          3648011313  incr Daily
+09/14/2011 00140L4       /proj                          829525429   incr Daily
+09/15/2011 00140L4       /proj                          829611875   incr Daily
+09/16/2011 00140L4       /proj                          1366569132  incr Daily
+09/19/2011 00143L4       /proj                          1081615577  incr Daily
+[root@samatrix07:/usr/sbin] /usr/sbin/recover -s sabkupsvr02
+No index was found for /usr/sbin/. The current working directory is /.
+recover>
+recover> /proj/asic/nozomi/spyglass/tag6.2-20110907/tag6.2_CDC_MPFE.rpt.waived
+6467:recover: /proj/asic/nozomi/spyglass/tag6.2-20110907/tag6.2_CDC_MPFE.rpt.waived: Command not found.
+recover> .
+6467:recover: .: Command not found.
+recover> ./proj/asic/nozomi/spyglass/tag6.2-20110907/tag6.2_CDC_MPFE.rpt.waived
+6467:recover: ./proj/asic/nozomi/spyglass/tag6.2-20110907/tag6.2_CDC_MPFE.rpt.waived: Command not found.
+recover> dir
+total 24
+09/13/2011 10:22       <JUNCTION>         apps
+09/08/2011 11:29       <JUNCTION>         data1
+05/23/2011 10:33       <JUNCTION>         proj
+recover> cd proj
+recover> ls
+ application          dvt                  hardware             kronos2              mach16               nozomi_old           tpc                  ziopsgen4
+ asic                 flashchannel         iguana               m1                   mach8                program_management   ziopsgen2            ziopsgen5
+ cf                   fw                   kronos               m2                   nozomi               sysarch              ziopsgen3
+recover> cd asic
+recover> cd nozomi
+recover> cd spyglass
+recover> cd tag6.2-20110907
+recover> ls
+ tag6.2_CDC_AES.rpt                       tag6.2_CDC_PCIE.rpt.not_waived           tag6.2_Lint_DDR_PHY.rpt.not_waived       tag6.2_Lint_Others.rpt.not_waived
+ tag6.2_CDC_AES.rpt.not_waived            tag6.2_CDC_PCIE.rpt.not_waived~          tag6.2_Lint_DDR_PHY.rpt.waived           tag6.2_Lint_Others.rpt.waived
+ tag6.2_CDC_AES.rpt.waived                tag6.2_CDC_PCIE.rpt.waived               tag6.2_Lint_DMA_BRIDGE.rpt               tag6.2_Lint_PCIE.rpt
+ tag6.2_CDC_DDR_PHY.rpt                   tag6.2_CDC_PCIE.rpt.waived~              tag6.2_Lint_DMA_BRIDGE.rpt.not_waived    tag6.2_Lint_PCIE.rpt.not_waived
+ tag6.2_CDC_DDR_PHY.rpt.not_waived        tag6.2_CDC_PLB_MPFE_IF.rpt               tag6.2_Lint_DMA_BRIDGE.rpt.waived        tag6.2_Lint_PCIE.rpt.waived
+ tag6.2_CDC_DDR_PHY.rpt.waived            tag6.2_CDC_PLB_MPFE_IF.rpt.not_waived    tag6.2_Lint_FCI.rpt                      tag6.2_Lint_PLB_MPFE_IF.rpt
+ tag6.2_CDC_FCI.rpt                       tag6.2_CDC_PLB_MPFE_IF.rpt.waived        tag6.2_Lint_FCI.rpt.not_waived           tag6.2_Lint_PLB_MPFE_IF.rpt.not_waived
+ tag6.2_CDC_FCI.rpt.not_waived            tag6.2_CDC_RAID.rpt                      tag6.2_Lint_FCI.rpt.waived               tag6.2_Lint_PLB_MPFE_IF.rpt.waived
+ tag6.2_CDC_FCI.rpt.waived                tag6.2_CDC_RAID.rpt.not_waived           tag6.2_Lint_FC.rpt                       tag6.2_Lint_RAID.rpt
+ tag6.2_CDC_FC-no_ck_soc_o.rpt            tag6.2_CDC_RAID.rpt.waived               tag6.2_Lint_FC.rpt.not_waived            tag6.2_Lint_RAID.rpt.not_waived
+ tag6.2_CDC_FC.rpt                        tag6.2_CDC_SAS-no_ck_soc_o.rpt           tag6.2_Lint_FC.rpt.waived                tag6.2_Lint_RAID.rpt.waived
+ tag6.2_CDC_FC.rpt.not_waived             tag6.2_CDC_SAS.rpt                       tag6.2_Lint_MBIST.rpt                    tag6.2_Lint_SAS.rpt
+ tag6.2_CDC_FC.rpt.waived                 tag6.2_CDC_SAS.rpt.not_waived            tag6.2_Lint_MBIST.rpt.not_waived         tag6.2_Lint_SAS.rpt.not_waived
+ tag6.2_CDC_MPFE.rpt                      tag6.2_CDC_SAS.rpt.waived                tag6.2_Lint_MBIST.rpt.waived             tag6.2_Lint_SAS.rpt.waived
+ tag6.2_CDC_MPFE.rpt.not_waived           tag6.2_Lint_AES.rpt                      tag6.2_Lint_MPFE.rpt                     tag6.2_Lint_SCRAMBLER.rpt
+ tag6.2_CDC_MPFE.rpt.waived               tag6.2_Lint_AES.rpt.not_waived           tag6.2_Lint_MPFE.rpt.not_waived          tag6.2_Lint_SCRAMBLER.rpt.not_waived
+ tag6.2_CDC_PCIE.modified.rpt             tag6.2_Lint_AES.rpt.waived               tag6.2_Lint_MPFE.rpt.waived              tag6.2_Lint_SCRAMBLER.rpt.waived
+ tag6.2_CDC_PCIE.rpt                      tag6.2_Lint_DDR_PHY.rpt                  tag6.2_Lint_Others.rpt
+recover> add tag6.2_CDC_MPFE.rpt.waived
+1 file(s) marked for recovery
+recover> recover
+Recovering 1 file into its original location
+Volumes needed (all near-line):
+        00134L4 at SPECTRA@8.1.1
+Requesting 1 file(s), this may take a while...
+Requesting 1 recover session(s) from server.
+./tag6.2_CDC_MPFE.rpt.waived
+Received 1 file(s) from NSR server `sabkupsvr02'
+Recover completion time: Wed 21 Sep 2011 03:39:23 PM PDT
+recover> recover> recover>
+

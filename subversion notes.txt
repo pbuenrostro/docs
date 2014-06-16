@@ -1,0 +1,21 @@
+Subversion
+
+Usually it will install the binaries under /usr/bin
+
+Need to have /usr/bin/svnserve -d in order to process requests
+
+Each repo has a svnserve.conf under /repo/conf
+This files controls the configuration of the svnserve daemon
+for this specific repository, these are some common enabled options:
+
+anon-access = read
+auth-access = write
+password-sb = passwd   (this points to the location of the passwd file)
+			it can also be password-sb = /svn/passwd
+
+
+Also under /repo/conf there is a file that stores the passwords
+for the allowed users, the file is called passwd
+Entries should look like this:
+svntest = test
+pbuenrostro = test

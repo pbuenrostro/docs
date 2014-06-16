@@ -1,0 +1,40 @@
+172.17.10.1 Control Station for Celerra NS120
+172.17.10.2 SPA for CX4 NS120
+172.17.10.3 SPB for CX4 NS120
+
+172.18.0.30 Control Station Celerra NS40G
+172.18.0.35 SPA CX3
+172.18.0.36 SPB CX3
+
+
+Cisco 9124 Fiber switches
+172.17.251.232
+172.17.251.233
+
+
+https://3009kvm2/home.asp
+stec123
+
+
+
+
+
+http://www.stec-inc.com/partner/login.php
+
+
+saextwns2  and saextwns1 - Windows Progress name servers
+
+
+Web101 - Web105 (Linux web servers on the DMZ)
+Each web server has two nics, on in the 192.168.10.X and 192.168.14.X
+Web servers are under a keepalived load balancer.
+
+
+
+savmsvr16 ESX server hosts the these linux web VM's:
+
+web101
+web102
+web105
+
+also the ftp server saftp02-dmz

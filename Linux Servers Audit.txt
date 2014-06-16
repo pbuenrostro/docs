@@ -1,0 +1,124 @@
+Mymatrix01, Mymatrix02 and Mymatrix03 basic information has been verified and it
+is the same as in sharepoint, server lists, Linux servers.
+
+Paul Buenrostro
+
+
+
+
+
+
+
+########################################## MYMATRIX03 #######################################
+[root@mymatrix03:~] ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:1B:78:93:7C:52
+          inet addr:172.30.0.202  Bcast:172.30.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::21b:78ff:fe93:7c52/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:252531414 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:103690990 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:60557749398 (56.3 GiB)  TX bytes:63482001819 (59.1 GiB)
+          Interrupt:225 Memory:f6000000-f6012100
+
+[root@mymatrix03:~] df -lk
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/mapper/VolGroupEMC01-LogVol00
+                      13288568   8495108   4118440  68% /
+/dev/emcpowera1          99134     15093     78922  17% /boot
+none                   8206572         0   8206572   0% /dev/shm
+/dev/mapper/VolGroupEMC02-LogVol00
+                     154785772  31355492 115567600  22% /localdisk
+/dev/emcpowere1        5238596    268312   4970284   6% /ocfs2
+[root@mymatrix03:~] cat /proc/cpuinfo | grep -i 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+[root@mymatrix03:~] uname -a
+Linux mymatrix03 2.6.9-67.ELsmp #1 SMP Wed Nov 7 13:56:44 EST 2007 x86_64 x86_64 x86_64 GNU/Linux
+[root@mymatrix03:~] free -m
+             total       used       free     shared    buffers     cached
+Mem:         16028      11498       4530          0        118      10790
+-/+ buffers/cache:        588      15439
+Swap:        16415         36      16379
+[root@mymatrix03:~] hostname
+mymatrix03
+[root@mymatrix03:~] cat /etc/redhat-release
+Red Hat Enterprise Linux AS release 4 (Nahant Update 6)
+
+
+
+
+
+
+
+########################################### MYMATRIX02  ######################################
+[root@mymatrix02:~] hostname
+mymatrix02.eng.stec-inc.ad
+[root@mymatrix02:~] uname -a
+Linux mymatrix02.eng.stec-inc.ad 2.6.9-67.ELsmp #1 SMP Wed Nov 7 13:56:44 EST 2007 x86_64 x86_64 x86_64 GNU/Linux
+[root@mymatrix02:~] df -lk
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/mapper/VolGroupEMC01-LogVol00
+                      13288568   8509704   4103844  68% /
+/dev/emcpowera1         101086     15194     80673  16% /boot
+none                   8206548         0   8206548   0% /dev/shm
+/dev/mapper/VolGroupEMC02-LogVol00
+                     154785772  16942312 129980780  12% /localdisk
+/dev/emcpowerm1        5238596    268312   4970284   6% /ocfs2
+[root@mymatrix02:~] cat /proc/cpuinfo | grep -i 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+model name      : Dual-Core AMD Opteron(tm) Processor 2220
+[root@mymatrix02:~] free -m
+             total       used       free     shared    buffers     cached
+Mem:         16028       1240      14787          0         89        921
+-/+ buffers/cache:        230      15797
+Swap:        16415          0      16415
+
+[root@mymatrix02:~] cat /etc/redhat-release
+Red Hat Enterprise Linux AS release 4 (Nahant Update 6)
+
+
+
+
+
+
+################################## MYMATRIX01 ######################################
+[root@mymatrix01:~] hostname
+mymatrix01
+[root@mymatrix01:~] ifconfig eth0
+eth0      Link encap:Ethernet  HWaddr 00:18:FE:72:BF:6C
+          inet addr:172.30.0.200  Bcast:172.30.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::218:feff:fe72:bf6c/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:75056193732 errors:0 dropped:2742 overruns:0 frame:0
+          TX packets:72695282436 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:65752413699954 (59.8 TiB)  TX bytes:65931863674620 (59.9 TiB)
+          Interrupt:169 Memory:f8000000-f8011100
+
+[root@mymatrix01:~] free -m
+             total       used       free     shared    buffers     cached
+Mem:         16029      15993         36          0         80       8998
+-/+ buffers/cache:       6913       9115
+Swap:         1983         17       1966
+[root@mymatrix01:~] uname -a
+Linux mymatrix01 2.6.9-55.ELsmp #1 SMP Fri Apr 20 16:36:54 EDT 2007 x86_64 x86_64 x86_64 GNU/Linux
+[root@mymatrix01:~] df -lk
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/mapper/VolGroup01-LogVol00
+                      13288568   8754640   3858908  70% /
+/dev/emcpowera1         101086     14903     80964  16% /boot
+none                   8207192         0   8207192   0% /dev/shm
+/dev/mapper/VolGroupEMC02-LogVol00
+                     154785772  98464416  48458676  68% /localdisk
+[root@mymatrix01:~] cat /etc/redhat-release
+Red Hat Enterprise Linux AS release 4 (Nahant Update 5)
+[root@mymatrix01:~] cat /proc/cpuinfo | grep -i ghz
+model name      : Intel(R) Xeon(R) CPU            5160  @ 3.00GHz
+model name      : Intel(R) Xeon(R) CPU            5160  @ 3.00GHz
+model name      : Intel(R) Xeon(R) CPU            5160  @ 3.00GHz
+model name      : Intel(R) Xeon(R) CPU            5160  @ 3.00GHz

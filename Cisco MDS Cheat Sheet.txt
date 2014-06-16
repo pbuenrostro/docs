@@ -1,0 +1,564 @@
+
+***FCDOMAIN***
+sh fcdomain domain-list		Display fcdomain ID's per vsan also principal switch if "TE" exists
+sh fcdomain allowed 		Displays used and allowed VSAN's per VSAN
+sh fcdomain fcid persistent 	Displays the persistent FCID's(static and dynamic) database(enabled by default on all VSAN's)
+sh fcdomain status		Displays if fcdomain distribution is enabled
+sh fcdomain statistics		Displays stats per VSAN for the # of Prin. switch selection,disruptive and nondisruptive reconfigs
+
+***CFS***
+sh cfs app			Display CFS Applications
+sh cfs status			Display CFS status
+sh cfs peers			Displays all CFS peers
+
+***ALIASES***
+sh device-alias	data		Display Device aliases (global, distributed by CFS)
+sh fcalias			Display fcaliases (local)
+fcalias rename oldname newname vsan 2		It renames a fcalias in vsan 2
+fcalias clone oldname newname vsan 2		clones an fcalias
+
+***NETWORKING***
+config t, int mgmt 0, ip address 1.1.1.2 255.255.255.0, switchport speed 100, no shut, exit, ip default-gateway 1.1.1.1
+config t, hostname SwitchA	Set's the hostname onthe switch
+config t, ip domain-name	Set's the domain name of the switch
+config t, banner motd # STEC #		Banner MOTD setup
+ping hosta				to ping another hosts(ethernet)
+fcping pwwn 50:06:01:65:46:e0:1c:e4 vsan 8	To ping a N_port
+traceroute cisco.com		standard traceroute command
+telnet, ssh			You can either telnet or ssh from the switch to another host or switch
+sh int mgmt0 bri
+send shutting down now			Sends warning message to all active users on the switch
+sh ip arp 			Display MAC address
+sh ip route			Display gateway of mgmt0
+sh ip traffic			Display IP statistics
+sh hosts			Display domain name and DNS servers
+sh switchname			Display switch name(hostname)
+
+
+***SWITCH INFO***
+Gen1 modules sharee 2.5Gb per port group
+Gen2 modules share  12.8Gb per port group
+Gen3 modules share 48Gb per port group or 192Gb per slot except module 4/44 that has four 8Gb and 44 4Gb ports with a total of 96Gb of full duplex bandwidth
+10Gb modules share 10Gb per port group(only has one)
+9124 and 9134 switch has 16Gb per port group
+
+write erase		erases the startup configuration, won't affect running config or loader functionality like mgmt0 IP config, gateway and boot variables
+write erase boot 	erases the configuratio of the loader functionality like boot variables, IP, netmask, gateway, mgmt0
+sh version			display kickstart,bios, system image version and hardware type
+sh boot				display kickstart and system image file names
+sh hardware			Same as "sh version" with more details like serial number, model number, power supplies info, fan info
+sh environment			Display power supply and switch amp and watts usage, status, chassis status and temp, fan status
+sh cores			Displays the existing core files on the switch
+sh processes			Displays all processes name with the PID's and state
+sh system default zone		Displays system default zone config, this is for members that are not part of ANY other zone
+sh wwn switch			Displays switch WWN
+sh system reset-reason		Display reset reason for Supervisor Module 1
+sh license usage		Display license feature usage, expiration, etc
+sh module 1			Display module specs like model, port #'s, speed, WWN,OS version, MAC Address
+sh port-license 		Display all ports and if they are activated by a license
+sh port-resources module 1	Display the port resource for module 1 like amount of B2B credit buffers, Bandwidth and rate mode(dedicated or shared)
+sh int fc1/15 capabilities      Displays port capabilities like speed, rate modes, extended B2B credits, beacon, out of service
+sh int trans			Displays transceivers details and capabilities, status, speed and temperature
+
+***Port Indexes***
+Gen1 modules only support a maximum of 252 port indexes, regardless of the type of switching modules
+Gen2 modules support a maximum of 1020 port indexes when all switching modules in the chassis are Generation 2
+Gen3 modules only support a maximum of 252 port indexes when combination of Generation 1 and Generation 2 switching modules
+sh port index 			Displays the port index distribution per module
+
+
+***B2B received credits configuration***
+Amount of buffers and defaults depends on the switching modules, generation, rate mode and if the port is an ISL or Fx 
+Out of service mode releases it's shared resources for the port group
+
+
+config t, int fc1/1, switchport fcrxbbcredit 5		- assigns a BB_credit of 5
+FOR E ports: switchport fcrxbbcredit 200 mode E
+
+Performance buffers:
+			config t, int fc1/1, switchport fcrxbbcredit performance buffers 45
+Extended BB_credits(long hauls links):	config t, fcrxbbcredit extended enable, int fc1/1, switch fcrxbbcredit extended 1500
+            
+sh int bbcredit			Displays the receive and transmit b2b credits
+sh int fc1/1 | inc B2B
+
+
+
+
+***Running,Startup Config***
+sh running			Display running config
+sh running diff			Display differenve between startup and running config
+sh startup-config		Display startup config
+copy run start			Copy running config to startup config(NVRAM)
+
+***FLOGI,FCNS***
+sh flogi data			Display fabric login database
+sh fcns data			Display fabric name server database
+
+***FCS***
+Sh fcs database 	shows many information per vsan, pwwn,fwwn, switch wwn, switch domainID	
+Sh fcs port vsan 8	same but for a specific vsan
+
+***Zoneset commands***
+zoneset distribute full vsan 8  Distributes the full zone set along with the active zone set during activation, deactivation and merge
+zoneset distribute vsan 8	One time immediate distribution of inactive, unmodified zone sets throughout the fabric
+zoneset activate name zonesetname vsan 2	activate a zone
+zoneset clone oldname newname			clones a zoneset
+zonset rename oldname newname		It renames a zoneset in vsan 2
+
+***Zone commands***
+zone copy active-zoneset full-zoneset vsan 2  Makes a copy of the active zone set in VSAN 2 to the full zone set
+zone clone oldname newname vsan 2		clones a zone
+clear zone database vsan 2			It clears the full zone database NOT the active zone database
+sh int fc1/10| inc WWN		To find the port WWN of a specific interface, useful for port zoning
+sh zone policy			Displays policies per VSAN for default zone access, distribution, broadcast and merge
+
+
+**BASIC ZONING - HOW TO***
+config t, zone name zonea vsan 8
+member pwwn 10:00:00:00:77:99:7a:1b
+member pwwn 10:00:00:00:77:99:7a:2b
+zoneset name zoneseta vsan 8
+member zonea
+zoneset activate name zoneseta vsan 8
+sh zone active vsan 8
+sh zone vsan 8
+sh zone status vsan 8
+sh zone statistics vsan 8
+***
+
+***TO Change VSAN's on a port
+config t, vsan data, vsan 2 interface fc1/9 
+
+***Trunking***
+Trunk protocol is enabled by default(
+Generally is enabled on all ports(verify with sh int fc1/15 | inc trunk),
+will automatically convert in to a TE port when joined with another fabric.
+Can use command "sh int fc1/15 | inc Trunk" to view the allowed vsans on that port
+sh trunk protocol		Displays if trunk protocol is enabled
+sh int trunk vsan 8		Displays the trunked ports status with it's VSAN's and FCID's,
+		
+***MDS FileSystems:***
+bootflash:	Internal compactflash for system images, config files and others
+volatile:	VRAM for temporary changes
+log:		to store logs(messages)
+modlfash:	compacflash on a SSM module for storing SSI boot image
+**********
+
+***Default Roles***
+Network-operator, network-admin and default-role
+
+
+***AAA - HOW TO*** Stands for Authentication, Authorization and Accounting which are services that are provided locally or by a Radius or TACACS+ protocol
+Radius how to config:
+aaa group server radius RADIUS_GROUP	- Create a Radius group
+server 1.1.1.1
+radius-server host 1.1.1.1 key <key1>
+aaa authentication login default group RADIUS_GROUP local - Changes the default authentication for telnet and ssh sessions to Radius than local if the radius doesn't work
+
+sh aaa auth		shows the authentication enabled methods for default(telnet,ssh), console, iscsi and dhchap(devices when connect to the swtich)
+sh aaa accounting	show the accounting enabled methods(log data for each session on the switch)
+sh radius-server		display radius servers
+sh radius status		Displays the status of radius distribution, sessions, etc
+
+For role mapping from the Radius server:
+Cisco-AVPair = shell:roles="rolename1 rolename2"
+For role mapping from TACACS+:
+roles="rolename1 rolename2
+
+
+Other:
+aaa auth login console group radius_group local		- Optional for authentication methods for the console
+aaa auth iscsi default group radius_group local		- For iSCSI
+aaa auth dhchap default group radius_group local	- For authentication devices that connect to the switch
+aaa auth login default none				- FOR NO AUTHENTICATION!!!!!!! on telnet and ssh, can use "console" and "mschap" rather then "default"
+aaa accounting group radius_group local			- Send accounting info to the radius group than local if not available
+Even if local is not specified as one of the options is tried when all other options fail
+
+Radius global options:
+timeout, wait time for response from a radius server
+retransmit, retries default is one
+idle-time, amount of time before the switch sends out a test packet to the Radius server
+deadtime, amount of time before the swtich declares dead the radius server
+directed-request, allows users to selec a radius server for auth
+
+Notes:
+Radius default auth port 1812
+Radius default accounting port 1813
+*Cisco ACS Server is regularly used to provide AAA services, also can use Windows IAS which has Radius capabilities
+***
+
+***Accounting***(login information about users and about some of the changes they make)
+Sh accounting log 10000	last 10000 bytes of accounting info (user logging, fabric changes, etc)
+clear accounting log		Clear contents of log
+
+**Logging***(message log, same as /var/adm/messages on unix, status changes for the overall switch)
+LOG MESSAGES ARE NOT SAVED ACROSS REBOOTS!!! only the nvram saved critical messages(level 2 and below)
+File size is limited to 4MB and is located in debug:messages
+
+config t, logging console 2  - send log messages that are critical or higher to console
+config t, logging monitor 3	- Configures monitor(ssh, telnet) at level 3(error) 3 or above are displayed on the monitor
+config t, logging level ntp 2 - log critical messages or higer to log file
+config t, logging timestamp seconds - timestamp in log messages with time in seconds(09:54:31 example)
+config t, logging server 10.1.1.1   - Defines a remote logging server, can have up to 3 configured
+sh logging
+sh logging last 15	- Last 15 lines of the message log
+sh logging nvram last 15 - log messages with a severity level of critical and below(0,1 and 2) are saved in NVRAM
+sh logging level	-  Default logging severity for all services, 0=emerg, 1=alerts, 2=critical, 3=errors, 4=warnings...
+sh logging logfile	- equal to more /var/adm/messages, looks at the entire log from begining
+sh logging server	- logging server
+terminal monitor  - enables logging for a telnet or ssh session ONLY(disabled by default) WILL ONLY WORK FOR THE CURRENT SESSION
+		    console session logging is enabled by default, if disabled it affects all sessions
+
+
+**User Account Management*** (Up to 256 users on a switch)
+config t, username pbuenrostro password stec123 role network-admin
+username pbuenrostro role network-admin" 	Assigns a role to a user
+username pbuenrostro password password1		Changes the password of the user
+sh user-account	        	displays all accounts with expiration(if there is) and role
+sh role				display all roles
+sh users			show users accesssing the switch with date when they logged in, IP from
+clear user pbuenrostro		forces the user to logout
+	
+
+***Clock and DST***
+config t, clock summer-time PDT 2 Sunday March 02:00 1 Sunday November 02:00 60		to adjust DST for US Pacific
+clock set 17:01:00		To set the clock
+sh clock			Display time and date
+sh run | inc summer-time	Display if DST is enabled
+
+***NTP***
+config t, ntp server 10.10.10.10, ntp peer 10.20.10.23	
+sh ntp peers			Display the configured servers and peers
+sh ntp status			Display NTP status for distribution(CFS) and others
+
+***TELNET***
+config t, telnet server		Enables telnet on the switch, it's enabled by default
+sh telnet server		Displays if Telnet is enabled
+
+***SSH***
+config t, ssh key rsa, ssh server enable	To enable ssh, ssh is disabled by default
+config t, line vty, exec-timeout 60		Set's the ssh or telnet session timeout to 60 minutes
+sh ssh server			Displays if SSH is enabled
+sh ssh key			Displays SSH keys
+
+***CONSOLE***
+config t, line console, speed 9600, databits 8, stopbits 1, parity none		Configure console port settings
+config t, line console, exec-timeout 60		Set's the console timeout to 60 minutes
+terminal session-timeout 600			Set the timeout for the CURRENT terminal session to 600 minutes
+sh line 			Display all configured terminal sessions
+sh terminal			Display current terminal settings like type, columns, session timeout
+
+***SERIAL PORT COM1***
+config t, line com1, speed 9600, databits 8, stopbits 1, parity none, no flowcontrol hardware		Configure Com1 port for modem
+config t, line com1, modem in		enables the Com1 port to only connect to a modem, "no modem in" to disable
+
+
+***Variables***
+cli var name test fc1/1				Set a variable to persist ONLY for the duration of your cli session
+sh int $(test)					Use the variable
+config t, cli var name mgmtport mgmt 0		Setting Persistent variable
+sh int $(mgmtport)
+config t, cli alias name shintbr show interface brief		Defined a command alias				Use persistent variable
+sh cli variables		show all variables
+alias				display command aliases
+
+
+***SYSTEM MANAGEMENT***
+copy volatile:file bootflash:file.$(TIMESTAMP)	Use the one and only predefined SAN-OS variable called TIMESTAMP
+cd bootflash:mydir				changes directory to mydir on bootflash
+dir						listings
+mkdir bootflash:test				create directory
+delete bootflash:test				remove directory, same command to delete a file
+move bootflash:test slot0:mydir/file		move file
+copy bootflash:test slot0:mydir/test1		copy file
+gzip volatile:file				compress file
+gunzip volatile:file				uncompress
+run-script slot0:test				will tun the script(cannot create script at prompt have to copy from outside)
+sh file volatile:test		show file contents
+
+***Software Upgrade Process***
+copy tftp://1.1.1.2/kickstart-ing bootflash:kickstart-img	Copy kickstart image, you can use tftp, ftp, scp or sftp to transfer the images
+copy tftp://1.1.1.2/system-img	bootflash:system-img		Copy system image
+install all system bootflash:system-img kickstart bootflash:kickstart-img	Install both images
+
+
+***Password recovery from console:***
+Press Ctrl-]		Is CTRL-] NOT "J", when switch begins to boot, will give a prompt like this: switch(boot)#
+config t
+admin-password	password1
+exit
+load bootflash:system-img.bin		load SAN-OS 
+*Login now with the new password
+config t, username admin password password1, exit	Reset password to ensure that is it also the SNMP password for FM
+copy run start						Save run config to startup
+
+
+
+
+***CFS Applications***
+
+NTP	When enabled distributes the server\peer configuration to all switches in the fabric (disabled by default - Physical)
+	*Distributes when you "ntp commit" to the database
+
+DPVM	When enabled distributes the DPVM database to all switches in the fabric		(Enabled by default - Physical)
+	*Distributes when you "dpvm commit" to the database
+
+FSCM	When enabled it instructs the other switches in the fabric to save their configurations to their local NVRAM (Enabled by default - Physical)
+	*Command to do this is "copy run start fabric"
+
+Role    When enabled distributes the Role names, descriptions, list of rules for the roles and VSAN policy and the list of permitted VSAN's (Disabled by default - Physical)
+	*Distributes when you "role commit vsan 3"
+	*To enable config t, role distribute
+
+Rscn    When enabled distributes the RSCN timer(rscn event-tov 300 vsan 2) configuration to all switches in the fabric	(Disabled by default - Logical)
+	*Distributes when you "rscn commit vsan 10" to the database
+        *Enable it with config t, rscn distribute
+
+Radius  When enabled distributes the server and global parameters except global keys and server groups (Disabled by default - Physical)
+	*Distributes implicitly when you begin a Radius\TACACS+ server or global configuration like specifying the global timeout (Disabled by default - Physical)
+
+fctimer When enabled distributes the fctimer configuration to all switches in the fabric	(Disabled by default - Physical)
+	*Distributes when you "fctimer commit" the database
+
+Syslogd When enabled distributes all the system message logging information to all the switches in the fabric (Disabled by default - Physical)
+	*Distributes when you "logging commit" the database
+
+Callhome When enabled distributes the callhome configuration to all switches in the fabric	(Disabled by default - Physical)
+	 *Distributes when you "commit" to the database
+
+Fcdomain When enabled distributes the allowed domaind ID list to all switches in the fabric     (Disabled by default - Logical)
+	 *Distributes when you "fcdomain commit vsan 10" to the database
+         *To enable config t, fcdomain distribute
+
+Device-alias When enabled distributes the device-aliases database to all switches in the fabric (Enabled by default - Physical)
+	 *Distributes when you "device-alias commit" to the database
+
+
+*******************************************
+
+
+***RSCN*** Registered State Change Notification***
+A FC service that informs hosts about changes in the fabric like disk join or leaving, FCNS registration change, new zone
+enforcement, IP address change or any other event that affects operation of the host.
+Once the switch sends an RSCN it's up to the nodes to query the FCNS to obtain new information.
+Changes are not delivered by the switch in the RSCN sent to the nodes.
+Apart from sending a RSCN to all registered hosts a switch RSCN(SW-RSCN) is sent to all reacheables switches in the fabric.
+
+sh rscn scr-table vsan 2
+sh rscn stat vsan 2
+
+If RSCN muti-pid option is enabled, then RSCN's may contain more thatn one affected port ID's.
+You can enabled it with config t, rscn muti-pid vsan 2
+***
+
+***Zoneset izolation due to zone merge failure***TO BE REVIEWED
+When two switches in a fabric are merged using a TE or E port, the port may become isolated if:
+   1) The Two switches have zones at either side with identical names
+   2) The active zone set on both switches contain a zone with the same name but with different zone members
+To verify this information, do this on both switches:
+   1) sh zone vsan vsan-id
+   2) sh zoneset vsan vsan-id
+To fix you need to overwrite the zoning config of one switch with the other switch's config with either of the following commands:
+   1) zoneset import interface fc1/1 vsan 5	(This will overwrite the local switch active zoneset with that of the remote switch)
+   2) zoneset export interface fc1/1 vsan 5	(Overwrite's the remote swtich active zone set with local switch config)
+***
+
+
+***Full Zone Set Distribution across the fabric***
+You can distribute full zone sets using one of two methods:
+1) one-time distribution at the EXEC mode level
+2) full zone set distribution at the configuration mode level. 
+
+				zoneset distribution Command Differences:
+zoneset distribute vsan Command(EXEC Mode)    				 zoneset distribute full vsan Command(Configuration Mode)
+
+1)Distributes the full zone set immediately.      			1)Does not distribute the full zone set immediately.
+
+2)Does not distribute the full zone set information
+along with the active zone set during activation,
+deactivation, or merge process.						2)Remembers to distribute the full zone set information along with the active zone set during
+							                activation, deactivation and merge processes.
+***
+
+***All switches in the Cisco MDS 9000 Family distribute active zone sets when new E port links come up or when a new zone set is activated in a VSAN***
+***The active zone set is not part of the full zone set***
+***Each VSAN has a full database and an active database***
+**Fcaliases can be created from pwwn, fwwn, fcid's, etc***
+***Each end device (N port or NL port) discovers other devices in the fabric by querying the name server. When a device logs in to the name server, the name
+   server returns the list of other devices that can be accessed by the querying device. If an Nx port does not know about the FC IDs of other devices outside its zone,
+   it cannot access those devices***
+***
+
+***Rebooting a Cisco MDS with 2 supervisors***
+reload - will just reboot
+system switchover - will lfailover to the other sv and reboot the current sv
+sh module - log into the now active supervisor and look at modules 7 & 8 to make sure one says "active *"
+            and the other says "ha-standby".
+            Once you see that, you can reboot the now active supervisor by typing in:
+            system switchover 
+            You've now rebooted both supervisors.
+NOTE: Be sure to save your running configuration to the startup configuration by typing in:
+copy run start
+***
+
+
+***iSCSI***
+MDS can map FC targets as iSCSI targets
+MDS will map iSCSI initiators to FC virtual hosts
+MDS by default will advertise all iSCSI targets on all Gb interfaces on all IPS and MPS-14/2 modules
+MDS identifies iSCSI hosts by IQN(default) or by IP address(One virtual NPort per IP address), this is configured per IPS port
+MDS presents iSCSI hosts to the FC fabric in transparent mode(one iSCSI host for one virtual FC host) or proxy(all iscsi for one virtual fc, only zoning as access control)
+MDS assignment of WWN for iSCSI initiators, dynamic(default)(each iSCSI hosts might get a different WWN) or static(each iSCSI hosts gets a specific WWN) user or system assigned 
+MDS can make a dynamic assigned nwwn/pwwn static
+MDS can assign vsan membership per iSCSI host or per iSCSI MDS interface(all hosts connected to this interface will inherit the configured vsan except the explicitly configured in a vsan)
+MDS provides two ways for access control for iSCSI devices, zoning and ACL, ACL has to be used for proxy initiator mode,
+    for zoning can use wwn and ip address or IQN for iSCSI hosts that DONT have a static WWN.
+    for ACL it only works if static iSCSI virtual targets exist. ACL can be enforced at the iSCSI discovery phase
+
+Recommendation: 
+      Use static mapping of iSCSI targets to pwwn (target)
+      IQN for iSCSI initiator identification       (initiator)
+      initiator mode with static system-assigned WWN's for the iSCSI to FC mapping (initiator)
+      Per iSCSI host the VSAN membership for iSCSI hosts (initiator)
+      zoning for access control (initiator and target)
+ 
+1)Two ways to map FC targets as iSCSI targets(no default, must be configured):
+
+Dynamic mapping: Automatic creation of iSCSI targets, it maps all FC targets as iSCSI devices
+		 config t, iscsi import target fc
+Static mapping: Manual creation of iSCSI targets, can map a target with all luns or a target with a specific lun(s)
+
+		1)Map a whole FC target as an iSCSI virtual target, all luns are part of the target
+		config t, iscsi virtual-target name iqn.1987-02.com.cisco.target-1, pwwn 28:00:01:02:03:04:05:06
+		
+		2)Map a subset of luns of a FC target to three iSCSI virtual targets:
+		config t, iscsi virtual-target name iqn.1987-02.com.cisco.target-1, pWWN 28:00:01:02:03:04:05:06 fc-lun 0 iscsi-lun 0
+         		  iscsi virtual-target name iqn.1987-02.com.cisco.target-2, pWWN 28:00:01:02:03:04:05:06 fc-lun 1 iscsi-lun 0
+          		  iscsi virtual-target name iqn.1987-02.com.cisco.target-3, pWWN 28:00:01:02:03:04:05:06 fc-lun 2 iscsi-lun 0
+
+
+
+2) iSCSI initiator identification configuration(How you want this IPS port to see iSCSI hosts, per IQN or IP address):
+
+By IQN:
+       config t, int iscsi 2/1, switchport initiator id name
+By IP address:
+       config t, int iscsi 2/1, switchport initiator id ip-address
+
+3) How iSCSI hosts ares presented to the FC fabric(as many fc hosts or as one)
+
+transparent mode:
+ WWN assignment to iSCSI initiators:
+   	
+Dynamic: config t, iscsi dynamic initiator iscsi
+
+Static using IQN name and system assigned: config t, iscsi initiator name iqn.1987-02.com.cisco.initiator, static nwwn system-assign, static pwwn system-assign
+Static using IP address and system assigned: config t, iscsi initiator ip-address 10.1.1.2, static nwwn system-assign, static pwwn system-assign				
+Static using IQN name and user assigned: config t, iscsi initiator name iqn.1987-02.com.cisco.initiator, static nwwn 20:00:00:05:30:00:59:11, static pwwn 21:00:00:20:37:73:3b:20
+Static using IP address and user assigned: config t, iscsi initiator ip-address 10.1.1.2, static nwwn 20:00:00:05:30:00:59:11, static pwwn 21:00:00:20:37:73:3b:20  	         
+
+
+change from dynamic to static assigned nwwn/pwwn:
+	config t, iscsi save-initiator name iqn.1987-02.com.cisco.initiator - per IQN
+	config t, iscsi save-initiator ip-address 10.1.1.2	- Per IP address
+	config t, iscsi save-initiator	- saves the nwwn/pwwn that have automatically been assigned to all initiators
+
+Proxy mode, with system-assigned nwww/pwwn or user defined:
+System assigned: config t, int iscsi 2/1, switchport proxy-initiator
+User assigned: config t, int iscsi 2/1, switchport proxy-initiator nwwn 20:00:00:05:30:00:59:11 pwwn 21:00:00:20:37:73:3b:20
+
+VSAN membership for iSCSI devices:
+	
+	-Per iSCSI host: config t, iscsi initiator name iqn.1987-02.com.cisco.initiator, vsan 3
+	-Per iSCSI interface: config t, iscsi interface vsan-membership, vsan database, vsan 2 interface iscsi 2/1
+
+Access control:  
+ZONING:
+	zoning per iSCSI node name: config t, zone name iSCSIzone vsan 2, member symbolic-nodename iqn.1987-02.com.cisco.initiator1
+        zoning per IP address: member ip-address 10.1.1.2
+        zoning per pwwn: member pwwn 20:00:00:05:30:00:59:11
+
+iSCSI-based(for static iSCSI virtual targets only, is also the preferred option for proxy initiator mode):
+  IQN based: config t, iscsi virtual-target name iqn.1987-02.com.cisco.initiator, pWWN 26:00:01:02:03:04:05:06, initiator iqn.1987-02.com.cisco.initiator1 permit
+  IP based:  initiator ipaddress 10.50.1.1 permit - Can also allow the entire subnet with "initiator ipaddress 10.1.1.0 255.255.255.0 permit"
+        All: all-initiator-permit 	- Allows all initiator nodes to access this virutal target
+
+config t, iscsi enable - Enable iSCSI
+config t, int gig 2/1, no shut, int iscsi 2/1, no shut	-  Enabled both the Gig and iscsi interface
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
